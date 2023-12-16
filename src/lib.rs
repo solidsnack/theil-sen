@@ -228,6 +228,31 @@ mod tests {
         assert_eq!(b, intercept);
     }
 
+    // From: https://blogs.sas.com/content/iml/2019/05/28/theil-sen-robust-regression.html
+    #[test]
+    fn nine_point_test_case() {
+        let points = vec![
+            // The first 7 points are from Sen's 1968 paper.
+            (1.0, 9.0),
+            (2.0, 15.0),
+            (3.0, 19.0),
+            (4.0, 20.0),
+            (10.0, 45.0),
+            (12.0, 55.0),
+            (18.0, 78.0),
+            // The next 2 were added in the 2019 blog post.
+            (12.5, 30.0),
+            (4.5, 50.0),
+        ];
+
+        let estimator = TheilSen::of(&points);
+
+        let (m, b) = estimator.estimate();
+
+        assert_eq!(m, 3.96875);
+        assert_eq!(b, 6.5625);
+    }
+
     use proptest::collection::vec;
     use proptest::*;
 
